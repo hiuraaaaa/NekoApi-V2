@@ -1,7 +1,7 @@
 module.exports = {
     name: {
-        main: 'Hiuraa API Base !!',
-        copyright: 'Hiuraa API Base'
+        main: 'NekoAPI',
+        copyright: 'Hiura'
     },
     description: 'Integrated API solution for your modern application development needs. Fast, secure, and reliable access.',
     icon: '/image/icon.png',
