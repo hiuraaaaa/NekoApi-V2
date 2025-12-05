@@ -3,7 +3,7 @@ const cheerio = require("cheerio");
 
 module.exports = {
   name: "GoogleImageSearch",
-  desc: "Scrape simple image URLs from Google Images (HTML only, no JS)",
+  desc: "Scrape images from Google Images (fixed version)",
   category: "Scraper",
   params: ["query", "max", "safe"],
 
@@ -11,56 +11,75 @@ module.exports = {
     try {
       const { query, max, safe } = req.query;
 
-      if (!query) {
+      if (!query)
         return res.status(400).json({
           status: false,
           error: 'Parameter "query" wajib diisi',
         });
-      }
 
-      // batas aman default
-      const MAX = Math.min(parseInt(max || "20", 10) || 20, 100);
-
-      // safe: "on" | "off" (default on)
+      const MAX = Math.min(parseInt(max || "20"), 100);
       const safeSearch = safe === "off" ? "off" : "active";
 
       const response = await axios.get("https://www.google.com/search", {
-        params: {
-          tbm: "isch",
-          q: query,
-          safe: safeSearch,
-        },
+        params: { tbm: "isch", q: query, safe: safeSearch },
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
         },
       });
 
-      const $ = cheerio.load(response.data);
-      const s = new Set();
+      const html = response.data;
+      const $ = cheerio.load(html);
 
-      $("img").each((_, e) => {
-        const src = $(e).attr("src");
-        if (src && src.startsWith("http")) {
-          s.add(src);
+      const urls = new Set();
+
+      // Ambil <img src>
+      $("img").each((_, el) => {
+        const src = $(el).attr("src");
+        if (src && src.startsWith("http")) urls.add(src);
+      });
+
+      // Ambil data-src
+      $("img").each((_, el) => {
+        const src = $(el).attr("data-src");
+        if (src && src.startsWith("http")) urls.add(src);
+      });
+
+      // Ambil data-iurl (full res)
+      $("img").each((_, el) => {
+        const src = $(el).attr("data-iurl");
+        if (src && src.startsWith("http")) urls.add(src);
+      });
+
+      // Ambil dari script JSON Google
+      const scripts = [];
+      $("script").each((_, el) => {
+        const txt = $(el).html();
+        if (txt && txt.includes("AF_initDataCallback")) scripts.push(txt);
+      });
+
+      for (const script of scripts) {
+        const matches = script.match(/https?:\/\/[^"]+\.(jpg|png|jpeg)/gi);
+        if (matches) {
+          for (const u of matches) urls.add(u);
         }
-      });
+      }
 
-      const imgs = [...s].slice(0, MAX);
+      const result = [...urls].slice(0, MAX);
 
-      return res.status(200).json({
+      // RETURN CLEAN (tanpa statusCode / creator)
+      return res.json({
         status: true,
-        statusCode: response.status,
         query,
-        count: imgs.length,
+        count: result.length,
         safeSearch: safeSearch !== "off",
-        images: imgs,
+        images: result,
       });
+
     } catch (err) {
-      return res.status(500).json({
+      return res.json({
         status: false,
-        statusCode: 500,
-        error: err.message || String(err),
+        error: err.message,
       });
     }
   },
