@@ -5,7 +5,6 @@ async function ssweb(targetUrl) {
   const token =
     "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJhdWQiOiIiLCJpYXQiOjE1MjMzNjQ4MjQsIm5iZiI6MTUyMzM2NDgyNCwianRpIjoicHJvamVjdF9wdWJsaWNfYzkwNWRkMWMwMWU5ZmQ3NzY5ODNjYTQwZDBhOWQyZjNfT1Vzd2EwODA0MGI4ZDJjN2NhM2NjZGE2MGQ2MTBhMmRkY2U3NyJ9.qvHSXgCJgqpC4gd6-paUlDLFmg0o2DsOvb1EUYPYx_E";
 
-  // step 1: upload
   const f1 = new FormData();
   f1.append(
     "task",
@@ -17,7 +16,6 @@ async function ssweb(targetUrl) {
     headers: { ...f1.getHeaders(), authorization: token },
   });
 
-  // step 2: generate preview
   const f2 = new FormData();
   f2.append("server_filename", up.data.server_filename);
   f2.append(
@@ -34,33 +32,33 @@ async function ssweb(targetUrl) {
     headers: { ...f2.getHeaders(), authorization: token },
   });
 
+  // URL thumbnail JPG
   return "https://api32.ilovepdf.com/thumbnails/" + prev.data.thumbnail;
 }
 
 module.exports = {
-  name: "SSWebILovePDF",
-  desc: "Generate website screenshot thumbnail via iLovePDF preview",
+  name: "SSWebImage",
+  desc: "Screenshot website dan keluarkan langsung sebagai file gambar",
   category: "Scraper",
   params: ["url"],
 
   async run(req, res) {
     try {
       const { url } = req.query;
-
       if (!url) {
-        return res.json({
-          status: false,
-          error: 'Parameter "url" wajib diisi',
-        });
+        return res.json({ status: false, error: 'Parameter "url" wajib diisi' });
       }
 
-      const thumb = await ssweb(url);
+      // ambil url gambar thumbnail
+      const imgUrl = await ssweb(url);
 
-      return res.json({
-        status: true,
-        url,
-        thumbnail: thumb,
-      });
+      // download ulang sebagai buffer biar bisa dikirim
+      const img = await axios.get(imgUrl, { responseType: "arraybuffer" });
+
+      // kirim langsung sebagai image/jpeg
+      res.set("Content-Type", "image/jpeg");
+      return res.send(Buffer.from(img.data));
+
     } catch (err) {
       return res.json({
         status: false,
