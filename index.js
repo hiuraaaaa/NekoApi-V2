@@ -1,4 +1,5 @@
 (async () => {
+    const cors = require('cors');
     const express = require('express');
     const fs = require('fs');
     const path = require('path');
@@ -21,6 +22,10 @@
     
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
+    app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    }));
     app.use('/', express.static(path.join(__dirname, 'docs')));
     
     logger.info('Starting server initialization...');
