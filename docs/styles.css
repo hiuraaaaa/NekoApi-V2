@@ -38,3 +38,32 @@ body.noscroll {
 #response-data::-webkit-scrollbar {
     display: none !important;
 }
+
+/* Accordion animations */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.accordion-content.active {
+    max-height: 2000px;
+    transition: max-height 0.3s ease-in;
+}
+
+.accordion-icon {
+    transition: transform 0.3s ease;
+}
+
+.accordion-icon.rotate {
+    transform: rotate(180deg);
+}
+
+.category-header {
+    cursor: pointer;
+    user-select: none;
+}
+
+.category-header:hover {
+    background-color: #f9fafb;
+}
