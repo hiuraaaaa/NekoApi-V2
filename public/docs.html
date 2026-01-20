@@ -3,57 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevAPI | Home</title>
+    <meta id="api-description" name="description" content="Description">
+    <link id="api-icon" rel="icon" href="/image/icon.png" type="image/png">
+    <title id="api-title">DevAPI | Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
-    <style>
-        /* Pengaturan tambahan agar serasi dengan docs.html */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #ffffff;
-            /* Grid halus sesuai screenshot sebelumnya */
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-
-        /* Banner dengan gaya industrial (dashed + dots) */
-        .industrial-banner {
-            border: 2px dashed #6b7280;
-            position: relative;
-            background: white;
-        }
-
-        /* Dekorasi bulatan hitam (identik dengan docs.html) */
-        .dot {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: #1f2937;
-            border-radius: 50%;
-            z-index: 10;
-        }
-
-        /* Efek tombol yang kokoh (Neubrutalism ringan) */
-        .btn-solid {
-            transition: all 0.2s ease;
-            box-shadow: 4px 4px 0px 0px #1f2937;
-        }
-        .btn-solid:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px 0px #1f2937;
-        }
-        .btn-solid:active {
-            transform: translate(2px, 2px);
-            box-shadow: 0px 0px 0px 0px #1f2937;
-        }
-    </style>
 </head>
-<body class="min-h-screen pt-[84px] pb-20">
-
-    <div id="page-loader" class="page-loader bg-white">
+<body class="bg-white min-h-screen pt-[84px] pb-10"> <div id="page-loader" class="page-loader bg-white">
         <div class="loader"></div>
     </div>
 
@@ -62,86 +20,103 @@
             Dev <span class="text-gray-400">API Base</span>
         </div>
         <div class="flex gap-6">
-            <a href="/" class="text-white text-[11px] font-bold uppercase tracking-wider border-b-2 border-white pb-1">Home</a>
-            <a href="/docs" class="text-gray-300 hover:text-white text-[11px] font-bold uppercase tracking-wider transition-colors">Docs</a>
+            <a href="/" class="text-gray-300 hover:text-white text-[11px] font-bold uppercase tracking-wider transition-colors">Home</a>
+            <a href="/docs" class="text-white text-[11px] font-bold uppercase tracking-wider border-b-2 border-white pb-1">Docs</a>
         </div>
     </nav>
-
+    
     <div class="px-10 md:px-5 max-w-3xl mx-auto">
-        
-        <div class="industrial-banner p-10 py-16 w-full mb-10">
+        <div class="flex flex-row items-center mb-6 justify-between">
+            <div class="flex flex-row gap-3">
+                <a id="api-info" target="_blank">
+                    <button class="bg-gray-50 p-2 lg:hidden focus:outline-none border border-gray-200">
+                        <span class="material-icons text-gray-600 align-middle">info</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <div id="banner" class="industrial-banner p-7 py-10 w-full mb-7 bg-white">
             <div class="dot -top-1.5 -left-1.5"></div>
             <div class="dot -top-1.5 -right-1.5"></div>
             <div class="dot -bottom-1.5 -left-1.5"></div>
             <div class="dot -bottom-1.5 -right-1.5"></div>
             
-            <div class="flex items-center gap-2 mb-4">
+            <div class="flex items-center gap-2 mb-2">
                 <a href="https://github.com/rynxzyy/Hiuraa-API-Base" target="_blank" class="flex items-center text-gray-400 hover:text-gray-500 transition-colors" style="font-size: 11px;">
                     <i class="fab fa-github mr-2"></i>
                     <span class="font-medium">Hiuraa API Base</span>
                 </a>
             </div>
             
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">
-                Build Faster with<br>Free REST APIs
-            </h1>
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <h2 id="api-name" class="text-3xl font-bold tracking-tight">Name</h2>
+                <div id="api-author" class="bg-gray-800 text-white text-[10px] font-bold px-2 py-1 tracking-widest uppercase shrink-0">by Who.</div>
+            </div>
+            <p id="api-desc" class="text-[11px] text-gray-600 mb-4 leading-relaxed">Desc</p>
+            <div id="api-links" class="flex flex-col gap-1 text-[11px] text-gray-500"></div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex justify-between items-center">
+                <span id="api-copyright" class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">© 2025 Rynxzyy • DevAPI</span>
+            </div>
+        </div>
+        
+        <div class="relative w-full mb-6">
+            <input 
+                type="text" 
+                id="api-search" 
+                class="w-full px-4 py-4 text-sm text-gray-700 border-2 border-gray-100 focus:outline-none focus:border-gray-800 transition-all pl-12" 
+                placeholder="Search API Endpoints...">
+            <span class="material-icons absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">search</span>
+        </div>
+        
+        <div class="tab-content" id="api-content"></div>
+    </div>
+    
+    <div id="api-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden flex items-center justify-center p-6 transition-opacity duration-200 ease-out opacity-0">
+        <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm opacity-0 transition-opacity duration-200 ease-out"></div>
+        <div class="relative z-10 bg-white border-2 border-gray-800 shadow-[8px_8px_0px_0px_rgba(31,41,55,1)] w-full max-w-lg mx-auto p-8 my-auto transform scale-95 opacity-0 transition-all duration-200 ease-out">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center">
+                    <span id="api-method" class="px-2 py-1 text-[10px] font-bold bg-blue-600 text-white mr-2 tracking-widest">GET</span>
+                    <h3 class="text-xl font-bold tracking-tight" id="modal-title">API Request</h3>
+                </div>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-900 transition-colors focus:outline-none">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
             
-            <p class="text-[11px] text-gray-700 mb-8 leading-relaxed max-w-md">
-                Akses koleksi RESTful API publik berkualitas tinggi tanpa hambatan autentikasi. 
-                Dibuat untuk mempercepat alur kerja pengembangan aplikasi Anda.
-            </p>
-
-            <div class="flex flex-wrap gap-4">
-                <a href="/docs" class="btn-solid bg-gray-800 text-white px-8 py-3.5 text-[11px] font-bold uppercase tracking-widest flex items-center gap-2">
-                    Get Started
-                    <span class="material-icons text-sm">arrow_forward</span>
-                </a>
-                <a href="#status" class="border-2 border-gray-800 text-gray-800 px-8 py-3.5 text-[11px] font-bold uppercase tracking-widest hover:bg-gray-50 transition">
-                    System Status
-                </a>
+            <div class="mb-5">
+                <p id="api-description" class="text-xs font-medium text-gray-500 leading-relaxed">API description will appear here</p>
             </div>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4 mb-12">
-            <div class="border border-gray-300 p-6 bg-white relative hover:border-gray-800 transition-all group">
-                <div class="bg-gray-50 p-2 inline-block mb-4 group-hover:bg-gray-100 transition-colors">
-                    <span class="material-icons text-gray-600 align-middle text-xl">bolt</span>
+            
+            <div id="params-container" class="mb-6"></div>
+            
+            <button id="submit-api" class="w-full bg-gray-800 hover:bg-gray-900 text-white px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] transition-all">
+                Send Request
+            </button>
+            
+            <div id="response-container" class="mt-6 hidden border-t border-gray-100 pt-6">
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="text-[10px] font-bold uppercase tracking-widest text-gray-400">Response</h4>
+                    <div class="flex items-center">
+                        <span id="response-status" class="px-2 py-0.5 text-[10px] font-bold bg-green-100 text-green-700 mr-2 uppercase">200 OK</span>
+                        <span id="response-time" class="text-[10px] font-bold text-gray-400">200ms</span>
+                    </div>
                 </div>
-                <h3 class="font-bold text-sm uppercase tracking-wide mb-2 text-gray-800">Lightning Fast</h3>
-                <p class="text-[11px] text-gray-500 leading-relaxed">
-                    Optimasi latency rendah di bawah 100ms untuk setiap request data publik Anda.
-                </p>
+                <pre id="response-data" class="bg-gray-50 p-4 text-[11px] font-mono text-gray-700 overflow-auto max-h-60 border border-gray-100"></pre>
             </div>
-
-            <div class="border border-gray-300 p-6 bg-white relative hover:border-gray-800 transition-all group">
-                <div class="bg-gray-50 p-2 inline-block mb-4 group-hover:bg-gray-100 transition-colors">
-                    <span class="material-icons text-gray-600 align-middle text-xl">no_encryption</span>
-                </div>
-                <h3 class="font-bold text-sm uppercase tracking-wide mb-2 text-gray-800">No Auth Required</h3>
-                <p class="text-[11px] text-gray-500 leading-relaxed">
-                    Langsung panggil endpoint tanpa perlu registrasi atau konfigurasi API Key.
-                </p>
-            </div>
-        </div>
-
-        <div class="mt-16 pt-8 border-t border-gray-200 flex justify-between items-center">
-            <span class="text-[10px] text-gray-400 font-bold tracking-[0.4em] uppercase">
-                © 2025 Rynxzyy • All Rights Reserved
-            </span>
         </div>
     </div>
 
+    <script src="/script.js"></script>
     <script>
-        window.addEventListener('load', function() {
+        // Loader logic agar sinkron dengan index
+        window.addEventListener('load', () => {
             const loader = document.getElementById('page-loader');
-            if (loader) {
-                setTimeout(() => {
-                    loader.style.opacity = '0';
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                    }, 100);
-                }, 400);
-            }
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 100);
+            }, 300);
         });
     </script>
 </body>
