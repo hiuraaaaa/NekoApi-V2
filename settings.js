@@ -1,7 +1,7 @@
 module.exports = {
     name: {
-        main: 'NekoAPI',
-        copyright: 'Hiura'
+        main: 'Lumina Api`s',
+        copyright: 'v1.2'
     },
     description: 'Integrated API solution for your modern application development needs. Fast, secure, and reliable access.',
     icon: '/image/icon.png',
