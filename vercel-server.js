@@ -16,8 +16,10 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 }));
 
-// Serve static files dari folder docs
-app.use(express.static(path.join(__dirname, 'docs')));
+// Serve static files dari folder public dan docs
+app.use('/image', express.static(path.join(__dirname, 'docs', 'image')));
+app.use('/err', express.static(path.join(__dirname, 'docs', 'err')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
     const originalJson = res.json;
@@ -45,8 +47,12 @@ String.prototype.capitalize = function() {
 
 // Load scraper
 (async () => {
-    global.scraper = new(await require('./lib/scrape.js'))('./lib/scrape_file');
-    global.scrape = await scraper.list();
+    try {
+        global.scraper = new(await require('./lib/scrape.js'))('./lib/scrape_file');
+        global.scrape = await scraper.list();
+    } catch (error) {
+        console.error('Failed to load scraper:', error.message);
+    }
 })();
 
 function loadEndpointsFromDirectory(directory, baseRoute = '') {
@@ -145,13 +151,23 @@ app.get('/set', (req, res) => {
 
 // 404 handler
 app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'docs', 'err', '404.html'));
+    const errorPath = path.join(__dirname, 'docs', 'err', '404.html');
+    if (fs.existsSync(errorPath)) {
+        res.status(404).sendFile(errorPath);
+    } else {
+        res.status(404).json({ error: 'Not Found' });
+    }
 });
 
 // 500 handler
 app.use((err, req, res, next) => {
     console.error(`500: ${err.message}`);
-    res.status(500).sendFile(path.join(__dirname, 'docs', 'err', '500.html'));
+    const errorPath = path.join(__dirname, 'docs', 'err', '500.html');
+    if (fs.existsSync(errorPath)) {
+        res.status(500).sendFile(errorPath);
+    } else {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
 
 // Export untuk Vercel
