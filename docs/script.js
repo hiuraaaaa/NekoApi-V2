@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         setupApiContent(endpoints);
         setupApiButtonHandlers(endpoints);
         setupSearchFunctionality();
+        setupAccordion();
     } catch (error) {
         console.error('Error loading configuration:', error);
     }
@@ -94,15 +95,32 @@ document.addEventListener('DOMContentLoaded', async function () {
     function setupApiContent(gtw) {
         const apiContent = document.getElementById('api-content');
         gtw.endpoints.forEach(category => {
-            const categoryHeader = document.createElement('h3');
-            categoryHeader.className = 'mb-4 text-xl font-semibold';
-            categoryHeader.textContent = category.name;
-            apiContent.appendChild(categoryHeader);
-    
+            // Category wrapper
+            const categoryWrapper = document.createElement('div');
+            categoryWrapper.className = 'mb-5';
+            
+            // Category header (clickable)
+            const categoryHeader = document.createElement('div');
+            categoryHeader.className = 'category-header flex items-center justify-between p-4 bg-gray-100 border border-gray-300 mb-0';
+            
+            const categoryTitle = document.createElement('h3');
+            categoryTitle.className = 'text-xl font-semibold text-gray-700';
+            categoryTitle.textContent = category.name;
+            
+            const chevronIcon = document.createElement('span');
+            chevronIcon.className = 'material-icons accordion-icon text-gray-600';
+            chevronIcon.textContent = 'expand_more';
+            
+            categoryHeader.appendChild(categoryTitle);
+            categoryHeader.appendChild(chevronIcon);
+            
+            // Accordion content (collapsible)
+            const accordionContent = document.createElement('div');
+            accordionContent.className = 'accordion-content';
+            
             const row = document.createElement('div');
-            row.className = 'row';
-            apiContent.appendChild(row);
-    
+            row.className = 'row pt-4';
+            
             const sortedItems = Object.entries(category.items)
                 .sort(([, a], [, b]) => (a.name || '').localeCompare(b.name || ''))
                 .map(([,item]) => item);
@@ -113,6 +131,33 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const isLastItem = index === sortedItems.length - 1;
                 const itemElement = createApiItemElement(itemName, item, isLastItem);
                 row.appendChild(itemElement);
+            });
+            
+            accordionContent.appendChild(row);
+            categoryWrapper.appendChild(categoryHeader);
+            categoryWrapper.appendChild(accordionContent);
+            apiContent.appendChild(categoryWrapper);
+        });
+    }
+    
+    function setupAccordion() {
+        const categoryHeaders = document.querySelectorAll('.category-header');
+        
+        categoryHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const accordionContent = this.nextElementSibling;
+                const icon = this.querySelector('.accordion-icon');
+                
+                // Toggle active class
+                const isActive = accordionContent.classList.contains('active');
+                
+                if (isActive) {
+                    accordionContent.classList.remove('active');
+                    icon.classList.remove('rotate');
+                } else {
+                    accordionContent.classList.add('active');
+                    icon.classList.add('rotate');
+                }
             });
         });
     }
@@ -180,12 +225,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         
         function captureOriginalData() {
             const result = [];
-            const categories = document.querySelectorAll('#api-content h3');
+            const categoryWrappers = document.querySelectorAll('#api-content > div');
             
-            categories.forEach(category => {
-                const nextElement = category.nextElementSibling;
-                if (nextElement && nextElement.classList.contains('row')) {
-                    const items = Array.from(nextElement.querySelectorAll('div[data-name]')).map(item => {
+            categoryWrappers.forEach(wrapper => {
+                const header = wrapper.querySelector('.category-header');
+                const accordionContent = wrapper.querySelector('.accordion-content');
+                const row = accordionContent?.querySelector('.row');
+                
+                if (header && row) {
+                    const items = Array.from(row.querySelectorAll('div[data-name]')).map(item => {
                         return {
                             element: item.cloneNode(true),
                             name: item.dataset.name,
@@ -194,8 +242,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                     });
                     
                     result.push({
-                        categoryElement: category,
-                        rowElement: nextElement,
+                        wrapper: wrapper,
+                        header: header,
+                        accordionContent: accordionContent,
+                        row: row,
                         items: items
                     });
                 }
@@ -208,8 +258,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (!originalData) return;
             
             originalData.forEach(categoryData => {
-                categoryData.categoryElement.classList.remove('hidden');
-                const row = categoryData.rowElement;
+                categoryData.wrapper.classList.remove('hidden');
+                const row = categoryData.row;
                 row.innerHTML = '';
                 
                 categoryData.items.forEach((item, index) => {
@@ -230,46 +280,28 @@ document.addEventListener('DOMContentLoaded', async function () {
                 return;
             }
             
-            const categories = document.querySelectorAll('#api-content h3');
-            
-            categories.forEach(category => {
-                category.classList.remove('hidden');
-            });
-            
-            categories.forEach(category => {
-                const nextElement = category.nextElementSibling;
-                if (nextElement && nextElement.classList.contains('row')) {
-                    const row = nextElement;
+            originalData.forEach(categoryData => {
+                const visibleItems = categoryData.items.filter(item => {
+                    const title = item.name?.toLowerCase() || '';
+                    const desc = item.desc?.toLowerCase() || '';
+                    return title.includes(searchTerm) || desc.includes(searchTerm);
+                });
+                
+                if (visibleItems.length === 0) {
+                    categoryData.wrapper.classList.add('hidden');
+                } else {
+                    categoryData.wrapper.classList.remove('hidden');
                     
-                    const originalCategoryData = originalData.find(data => data.categoryElement === category);
-                    if (!originalCategoryData) return;
+                    // Auto-expand when searching
+                    categoryData.accordionContent.classList.add('active');
+                    categoryData.header.querySelector('.accordion-icon').classList.add('rotate');
                     
-                    const visibleItems = [];
-                    
-                    originalCategoryData.items.forEach(item => {
-                        const title = item.name?.toLowerCase() || '';
-                        const desc = item.desc?.toLowerCase() || '';
-                        
-                        if (title.includes(searchTerm) || desc.includes(searchTerm)) {
-                            visibleItems.push(item);
-                        }
-                    });
-                    
-                    if (visibleItems.length === 0) {
-                        category.classList.add('hidden');
-                        row.innerHTML = '';
-                        return;
-                    }
-                    
+                    const row = categoryData.row;
                     row.innerHTML = '';
+                    
                     visibleItems.forEach((item, index) => {
                         const newItem = item.element.cloneNode(true);
-                        
-                        newItem.className = 'w-full mb-2';
-                        
-                        if (index === visibleItems.length - 1) {
-                            newItem.className = 'w-full mb-5';
-                        }
+                        newItem.className = index === visibleItems.length - 1 ? 'w-full mb-5' : 'w-full mb-2';
                         
                         const button = newItem.querySelector('.get-api-btn');
                         if (button) {
