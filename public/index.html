@@ -3,132 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevAPI | Build Faster with Free REST APIs</title>
+    <title>DevAPI | Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
     <style>
+        /* Pengaturan tambahan agar serasi dengan docs.html */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #ffffff;
-            /* Grid background tipis untuk estetika industrial */
+            /* Grid halus sesuai screenshot sebelumnya */
             background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
             background-size: 30px 30px;
         }
 
-        .industrial-border {
-            border: 2px dashed #6b7280; /* Gray-500 */
+        /* Banner dengan gaya industrial (dashed + dots) */
+        .industrial-banner {
+            border: 2px dashed #6b7280;
             position: relative;
+            background: white;
         }
 
-        /* Dekorasi bulatan hitam di sudut border dashed */
-        .corner-dot::before, .corner-dot::after, .corner-bottom-dot::before, .corner-bottom-dot::after {
-            content: '';
+        /* Dekorasi bulatan hitam (identik dengan docs.html) */
+        .dot {
             position: absolute;
             width: 12px;
             height: 12px;
-            background-color: #1f2937; /* Gray-800 */
+            background-color: #1f2937;
             border-radius: 50%;
             z-index: 10;
         }
-        .corner-dot::before { top: -6px; left: -6px; }
-        .corner-dot::after { top: -6px; right: -6px; }
-        .corner-bottom-dot::before { bottom: -6px; left: -6px; }
-        .corner-bottom-dot::after { bottom: -6px; right: -6px; }
 
-        .btn-industrial {
+        /* Efek tombol yang kokoh (Neubrutalism ringan) */
+        .btn-solid {
             transition: all 0.2s ease;
             box-shadow: 4px 4px 0px 0px #1f2937;
         }
-        .btn-industrial:hover {
+        .btn-solid:hover {
             transform: translate(-2px, -2px);
             box-shadow: 6px 6px 0px 0px #1f2937;
         }
-        .btn-industrial:active {
+        .btn-solid:active {
             transform: translate(2px, 2px);
             box-shadow: 0px 0px 0px 0px #1f2937;
         }
     </style>
 </head>
-<body class="min-h-screen pt-[80px] pb-20">
+<body class="min-h-screen pt-[84px] pb-20">
 
-    <nav class="py-4 px-10 w-full fixed top-0 z-20 bg-gray-800 text-white flex justify-between items-center">
-        <span class="font-bold tracking-tighter text-xl">DEV<span class="text-gray-400">API</span></span>
-        <div class="flex gap-4 text-xs font-medium uppercase tracking-widest">
-            <a href="/docs" class="hover:text-gray-400 transition">Documentation</a>
-            <a href="https://github.com" class="hover:text-gray-400 transition">Github</a>
+    <div id="page-loader" class="page-loader bg-white">
+        <div class="loader"></div>
+    </div>
+
+    <nav class="shadow-sm w-full fixed top-0 z-50 bg-gray-800 px-10 h-[64px] flex items-center justify-between">
+        <div class="text-white font-bold tracking-tighter uppercase text-sm">
+            Dev <span class="text-gray-400">API Base</span>
+        </div>
+        <div class="flex gap-6">
+            <a href="/" class="text-white text-[11px] font-bold uppercase tracking-wider border-b-2 border-white pb-1">Home</a>
+            <a href="/docs" class="text-gray-300 hover:text-white text-[11px] font-bold uppercase tracking-wider transition-colors">Docs</a>
         </div>
     </nav>
 
     <div class="px-10 md:px-5 max-w-3xl mx-auto">
         
-        <div class="industrial-border p-10 md:p-16 mb-10 corner-dot corner-bottom-dot bg-white/80 backdrop-blur-sm">
+        <div class="industrial-banner p-10 py-16 w-full mb-10">
+            <div class="dot -top-1.5 -left-1.5"></div>
+            <div class="dot -top-1.5 -right-1.5"></div>
+            <div class="dot -bottom-1.5 -left-1.5"></div>
+            <div class="dot -bottom-1.5 -right-1.5"></div>
+            
             <div class="flex items-center gap-2 mb-4">
-                <div class="bg-gray-800 text-white text-[10px] font-bold px-2 py-1 tracking-widest uppercase">
-                    Status: Operational
-                </div>
+                <a href="https://github.com/rynxzyy/Hiuraa-API-Base" target="_blank" class="flex items-center text-gray-400 hover:text-gray-500 transition-colors" style="font-size: 11px;">
+                    <i class="fab fa-github mr-2"></i>
+                    <span class="font-medium">Hiuraa API Base</span>
+                </a>
             </div>
             
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight leading-none">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight leading-tight">
                 Build Faster with<br>Free REST APIs
             </h1>
             
-            <p class="text-sm text-gray-600 mb-8 leading-relaxed max-w-md">
-                Akses koleksi API siap pakai untuk developer. Tanpa ribet autentikasi, langsung integrasi ke project impian Anda.
+            <p class="text-[11px] text-gray-700 mb-8 leading-relaxed max-w-md">
+                Akses koleksi RESTful API publik berkualitas tinggi tanpa hambatan autentikasi. 
+                Dibuat untuk mempercepat alur kerja pengembangan aplikasi Anda.
             </p>
 
             <div class="flex flex-wrap gap-4">
-                <a href="/docs" class="btn-industrial bg-gray-800 text-white px-8 py-3 text-sm font-bold flex items-center gap-2">
-                    GET STARTED
+                <a href="/docs" class="btn-solid bg-gray-800 text-white px-8 py-3.5 text-[11px] font-bold uppercase tracking-widest flex items-center gap-2">
+                    Get Started
                     <span class="material-icons text-sm">arrow_forward</span>
                 </a>
-                <a href="#features" class="border-2 border-gray-800 text-gray-800 px-8 py-3 text-sm font-bold hover:bg-gray-50 transition">
-                    FEATURES
+                <a href="#status" class="border-2 border-gray-800 text-gray-800 px-8 py-3.5 text-[11px] font-bold uppercase tracking-widest hover:bg-gray-50 transition">
+                    System Status
                 </a>
             </div>
         </div>
 
-        <div id="features" class="grid md:grid-cols-2 gap-6 mb-10">
-            <div class="border-2 border-gray-800 p-6 relative bg-white">
-                <div class="absolute -top-3 -right-3 bg-white border-2 border-gray-800 p-1">
-                    <span class="material-icons text-gray-800">bolt</span>
+        <div class="grid md:grid-cols-2 gap-4 mb-12">
+            <div class="border border-gray-300 p-6 bg-white relative hover:border-gray-800 transition-all group">
+                <div class="bg-gray-50 p-2 inline-block mb-4 group-hover:bg-gray-100 transition-colors">
+                    <span class="material-icons text-gray-600 align-middle text-xl">bolt</span>
                 </div>
-                <h3 class="font-bold text-lg mb-2">Lightning Fast</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">Endpoint berperforma tinggi dengan latensi minimal untuk integrasi tanpa hambatan.</p>
+                <h3 class="font-bold text-sm uppercase tracking-wide mb-2 text-gray-800">Lightning Fast</h3>
+                <p class="text-[11px] text-gray-500 leading-relaxed">
+                    Optimasi latency rendah di bawah 100ms untuk setiap request data publik Anda.
+                </p>
             </div>
 
-            <div class="border-2 border-gray-800 p-6 relative bg-white">
-                <div class="absolute -top-3 -right-3 bg-white border-2 border-gray-800 p-1">
-                    <span class="material-icons text-gray-800">no_encryption</span>
+            <div class="border border-gray-300 p-6 bg-white relative hover:border-gray-800 transition-all group">
+                <div class="bg-gray-50 p-2 inline-block mb-4 group-hover:bg-gray-100 transition-colors">
+                    <span class="material-icons text-gray-600 align-middle text-xl">no_encryption</span>
                 </div>
-                <h3 class="font-bold text-lg mb-2">No Auth Required</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">Mulai membangun aplikasi segera tanpa alur kerja autentikasi yang kompleks.</p>
-            </div>
-
-            <div class="border-2 border-gray-800 p-6 relative bg-white">
-                <div class="absolute -top-3 -right-3 bg-white border-2 border-gray-800 p-1">
-                    <span class="material-icons text-gray-800">code</span>
-                </div>
-                <h3 class="font-bold text-lg mb-2">Dev Friendly</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">JSON terstruktur dan dokumentasi bersih untuk pengembangan yang cepat.</p>
-            </div>
-
-            <div class="border-2 border-gray-800 p-6 relative bg-white">
-                <div class="absolute -top-3 -right-3 bg-white border-2 border-gray-800 p-1">
-                    <span class="material-icons text-gray-800">verified_user</span>
-                </div>
-                <h3 class="font-bold text-lg mb-2">99.9% Uptime</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">Infrastruktur andal yang memastikan API selalu tersedia saat dibutuhkan.</p>
+                <h3 class="font-bold text-sm uppercase tracking-wide mb-2 text-gray-800">No Auth Required</h3>
+                <p class="text-[11px] text-gray-500 leading-relaxed">
+                    Langsung panggil endpoint tanpa perlu registrasi atau konfigurasi API Key.
+                </p>
             </div>
         </div>
 
-        <div class="text-center pt-10 border-t border-gray-200">
-            <p class="text-[10px] font-bold text-gray-400 tracking-[0.3em] uppercase">
-                © 2025 DevAPI Framework • All Rights Reserved
-            </p>
+        <div class="mt-16 pt-8 border-t border-gray-200 flex justify-between items-center">
+            <span class="text-[10px] text-gray-400 font-bold tracking-[0.4em] uppercase">
+                © 2025 Rynxzyy • All Rights Reserved
+            </span>
         </div>
     </div>
 
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('page-loader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 100);
+                }, 400);
+            }
+        });
+    </script>
 </body>
 </html>
