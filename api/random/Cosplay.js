@@ -6,7 +6,8 @@ async function cosplayImage() {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Linux; Android 10)',
         'Accept': 'application/json'
-      }
+      },
+      timeout: 10000
     })
 
     return {
@@ -16,22 +17,24 @@ async function cosplayImage() {
   } catch (e) {
     return { 
       success: false, 
-      error: e.message 
+      error: e.message
     }
   }
 }
 
 module.exports = {
   name: "Cosplay",
-  desc: "Image",
+  desc: "Random Cosplay Image",
   category: "Random",
-  params: [],
 
   async run(req, res) {
     const result = await cosplayImage()
 
     if (result.success === false) {
-      return res.status(500).json(result)
+      return res.status(500).json({
+        status: false,
+        error: result.error
+      })
     }
 
     // Redirect langsung ke gambar
